@@ -4,7 +4,7 @@ Modules for HBNB console for the AirBnB clone project
 """
 import cmd
 from models.base_model import BaseModel
-
+from models import storage
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
@@ -63,6 +63,8 @@ class HBNBCommand(cmd.Cmd):
                 cls = globals()[line]
                 obj = cls()
                 # TODO: conver to json add to file and read ID
+                storage.new(obj)
+                storage.save()
             except:
                 print("** class doesn't exist **")
         else:
