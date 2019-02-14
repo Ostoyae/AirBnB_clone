@@ -13,14 +13,11 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """Instantiates the base model.
-
         Args:
             args: non-keyworded arguments to method(s)
             kwargs: keyworded arguments to method(s)
-
         Raises:
             none
-
         Returns:
             none
         """
@@ -53,5 +50,5 @@ class BaseModel():
             elif k == "updated_at":
                 attrs["updated_at"] = attrs["updated_at"].isoformat()
 
-        atts["__class__"] = self.__class__.__name__
+        attrs["__class__"] = self.__class__.__name__
         return attrs
