@@ -6,6 +6,7 @@ import cmd
 from models.base_model import BaseModel
 from models.city import City
 
+
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
 
@@ -52,7 +53,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, line):
         """
         creates an instance of a class
-        
+
         :param line: Name of class to create.
 
         :return: None
@@ -74,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
         """
         :params line: Name of Class and id
 
-        :usage: 
+        :usage:
             $ show <class name>.id
             $ [class] (id) {<dict of class>}
 
@@ -92,26 +93,26 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             except IndexError:
                 print("** instance id missing **")
-            
+
             try:
-                #temp until FileStorage is implmented
+                # temp until FileStorage is implmented
                 a = {"BaseModel.42": {"id": "42"}}
-                a["{}.{}".format(cls,ident)]
+                a["{}.{}".format(cls, ident)]
 #                storage.all()[cls+'.'+ident]
             except KeyError:
                 print("** no instance found **")
-    
+
     def do_all(self, line=None):
         """
         :params line: Name of Class
 
-        :usage: 
-        
+        :usage:
+
         :example 1:
             $ all
             $ [[BaseModel] (id) {<dict of class>}, [City] (id) {<dict of
             class>},..]
-        
+
         :example 2:
             $ all BaseModel
             $ [[BaseModel] (id) {<dict of class>}, [BaseModel] (id) {<dict of
@@ -119,10 +120,14 @@ class HBNBCommand(cmd.Cmd):
 
         :return: None
         """
-        
+
         ls_d = list()
-        storage = {"BaseModel.42": {"id": "42"}, "BaseModel.1337": {"id": "1337"},
-                "City.101": {"id": "101"}}
+        # TODO: use storage.all() once available
+        storage = {
+                "BaseModel.42": {"id": "42"},
+                "BaseModel.1337": {"id": "1337"},
+                "City.101": {"id": "101"}
+                }
         if line:
             for key, v in storage.items():
                 if key.startswith(line):
@@ -138,8 +143,6 @@ class HBNBCommand(cmd.Cmd):
                 del obj
         print(ls_d)
 
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-
-
-
