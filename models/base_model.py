@@ -7,6 +7,7 @@ from datetime import datetime
 import uuid
 import models
 
+
 class BaseModel():
     """Base class that other models/classes derive from"""
 
@@ -33,7 +34,6 @@ class BaseModel():
 
                 else:
                     pass
-            
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
