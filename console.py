@@ -50,9 +50,12 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
+    """-------------------------AirBnB commands--------------------------"""
+
     def do_create(self, line):
         """
-        creates an instance of a class
+        creates an instance of a class and then
+        print the ID of said new class
 
         :param line: Name of class to create.
 
@@ -71,15 +74,27 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
 
-    def do_show(self, line):
-        """
-        :params line: Name of Class and id
+    def help_create(self):
+        print("""
+        creates an instance of a class and then
+        print the ID of said new class
+
+        :param line: Name of class to create.
 
         :usage:
-            $ show <class name>.id
-            $ [class] (id) {<dict of class>}
+            $ create <class name>
+            <class id>
+        :example"
+            $ create BaseModel
+            <class id>
 
         :return: None
+        """)
+
+    def do_show(self, line):
+        """
+        Prints the string representation of an instance
+        based on class name and id
         """
         if not line:
             print("** class name missing **")
@@ -102,23 +117,24 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 print("** no instance found **")
 
-    def do_all(self, line=None):
-        """
-        :params line: Name of Class
+    def help_show(self):
+        print("""
+        Prints the string representation of an instance
+        based on class name and id
+
+        :params line: Name of Class and id
 
         :usage:
-
-        :example 1:
-            $ all
-            $ [[BaseModel] (id) {<dict of class>}, [City] (id) {<dict of
-            class>},..]
-
-        :example 2:
-            $ all BaseModel
-            $ [[BaseModel] (id) {<dict of class>}, [BaseModel] (id) {<dict of
-            class>}, ...]
+            $ show <class name>.id
+            $ [class] (id) {<dict of class>}
 
         :return: None
+        """)
+
+    def do_all(self, line=None):
+        """
+        Prints all string representation of all instances based or not on the
+        class name
         """
 
         ls_d = list()
@@ -143,6 +159,46 @@ class HBNBCommand(cmd.Cmd):
                 del obj
         print(ls_d)
 
+    def help_all(self):
+        print('''
+        Prints all string representation of all instances based or not on the
+        class name
+        
+        :params line: Name of Class
+        
+        :usage:
+
+        :example 1:
+            $ all
+            $ [[BaseModel] (id) {<dict of class>}, [City] (id) {<dict of \
+class>},..]
+
+        :example 2:
+            $ all BaseModel
+            $ [[BaseModel] (id) {<dict of class>}, [BaseModel] (id) {<dict of \
+class>}, ...]
+
+        :return: None
+        ''')
+
+    def do_update(self, line):
+        """
+        Updates an instance based on the class name and id by adding or updating
+        attribute (save the change into the JSON file)
+        """
+        pass
+
+    def help_update(self):
+        print('''
+        :params line: Class id and field to update
+
+        :Usage:
+            $ update <class name> <id> <attribute name> "<attribute value>"
+
+        TODO
+
+        :return: None
+        ''')
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
