@@ -4,11 +4,20 @@ Modules for HBNB console for the AirBnB clone project
 """
 import cmd
 from models.base_model import BaseModel
-from models.city import City
+# from models.city import City
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
+    '''
+    objects = {
+        "BaseModel.42": {"id": "42"},
+        "BaseModel.1337": {"id": "1337"},
+        "City.101": {"id": "101"}
+    }
+    '''
+    objects = storage.all()
 
     def help_help(self):
         print('\n'.join([
@@ -66,10 +75,10 @@ class HBNBCommand(cmd.Cmd):
             try:
                 cls = globals()[line]
                 obj = cls()
-                # TODO: conver to json add to file and read ID
-#                obj.save()
                 print(obj.id)
-            except:
+                storage.save()
+            except Exception as err:
+                print(err)
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
@@ -96,13 +105,12 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance
         based on class name and id
         """
-        objects = {"BaseModel.42": {"id": "42"}}  # temp data
         if not line:
             print("** class name missing **")
         else:
             args = line.split(' ')
             try:
-                (cls, cls_dict) = HBNBCommand.__find_class(args, objects)
+                (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
             except Exception as err:
                 print(err)
                 return
@@ -127,27 +135,21 @@ class HBNBCommand(cmd.Cmd):
         Prints all string representation of all instances based or not on the
         class name
         """
-
         ls_d = list()
-        # TODO: use storage.all() once available
-        storage = {
-                "BaseModel.42": {"id": "42"},
-                "BaseModel.1337": {"id": "1337"},
-                "City.101": {"id": "101"}
-                }
         if line:
-            for key, v in storage.items():
+            for key, v in self.objects.items():
                 if key.startswith(line):
                     obj = globals()[line](**v)
                     ls_d.append(str(obj))
                     del obj
 
         else:
-            for key, v in storage.items():
-                arg = key.split('.')
-                obj = globals()[arg[0]](**v)
-                ls_d.append(str(obj))
-                del obj
+            if self.objects:
+                for key, v in self.objects.items():
+                    arg = key.split('.')
+                    obj = globals()[arg[0]](**v)
+                    ls_d.append(str(obj))
+                    del obj
         print(ls_d)
 
     def help_all(self):
@@ -177,37 +179,43 @@ class>}, ...]
         Updates an instance based on the class name and id by adding or
         updating attribute (save the change into the JSON file)
         """
-        
-        objects = {"BaseModel.42": {"id": "42"}}
+
+#       objects = {"BaseModel.42": {"id": "42"}}
         attr = dict()
         if not line:
             print("** class name missing **")
         else:
             args = line.split(' ')
             try:
-                HBNBCommand.__find_class(args, objects)
+                (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
+                ident = "{}.{}".format(args[0], args[1])
             except Exception as err:
                 print(err)
                 return
-            try:
-                args = args[2::]
-                if len(args) > 2:  # strip away any possible extra attributes
-                    args = args[:2]
-                for idx, val in enumerate(args):
-                    print(val)
-                    try:
-                        if idx == 0:
-                            k = val
-                        elif idx == 1:
-                            v = val
-                        else:
-                            raise IndexError
-                    except indexerror:
-                            
-                            return
-            except Exception:
-                pass
 
+            args = args[2::]
+            if len(args) > 2:  # strip away any possible extra attributes
+                args = args[:2]
+            for idx in range(2):
+                try:
+                    if idx == 0:
+                        k = args[idx]
+                    elif idx == 1:
+                        v = args[idx]
+                except IndexError:
+                    if idx == 0:
+                        print("** attribute name missing **")
+                    elif idx == 1:
+                        print("** value missing **")
+                    return
+
+            cls = cls(**cls_dict)       # create a class with dict
+            cls.save()                  # Update 'update_at' attribute
+            cls_dict = cls.to_dict()    # convert class into Dict rep
+            cls_dict.update({k: v})     # update/insert requested attribute
+
+            self.objects[ident].update(cls_dict)  # update Objects
+            print(self.objects)
 
     def help_update(self):
         print('''
@@ -221,6 +229,27 @@ class>}, ...]
         :return: None
         ''')
 
+    def do_destroy(self, line):
+        if not line:
+            print("** class name missing **")
+        else:
+            args = line.split(' ')
+            try:
+                HBNBCommand.__find_class(args, self.objects)
+            except Exception as err:
+                print(err)
+                return
+        ident = "{}.{}".format(args[0], args[1])
+        self.objects.pop(ident)
+        storage.save()
+
+    def help_destroy(self):
+        print('''
+            destroy stuff
+
+            :usage:
+                ''')
+
     @staticmethod
     def __find_class(args=[], objects={}):
         """
@@ -229,14 +258,14 @@ class>}, ...]
         will return a tuple of (class, dictionary representation)
 
         Tuple:
-        0: Class 
+        0: Class
         1: Dictionary rep of object found in Objects.
 
         :return: turple(Class, Dict)
         """
         try:
             cls = globals()[args[0]]  # get class name
-            ident= args[1]
+            ident = args[1]
         except KeyError:
             raise KeyError("** class doesn't exist **")
             return
@@ -250,7 +279,8 @@ class>}, ...]
         except KeyError:
             raise KeyError("** no instance found **")
             return
-        return (cls , obj)
+        return (cls, obj)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
