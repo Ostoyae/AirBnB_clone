@@ -96,27 +96,18 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance
         based on class name and id
         """
+        objects = {"BaseModel.42": {"id": "42"}}
         if not line:
             print("** class name missing **")
-        else:
-            args = line.split(' ')
-            try:
-                cls = globals()[args[0]].__name__
-                ident = args[1]
-            except KeyError:
-                print("** class doesn't exist **")
-                return
-            except IndexError:
-                print("** instance id missing **")
-                return
+            return
 
-            try:
-                # temp until FileStorage is implmented
-                a = {"BaseModel.42": {"id": "42"}}
-                a["{}.{}".format(cls, ident)]
-#                storage.all()[cls+'.'+ident]
-            except KeyError:
-                print("** no instance found **")
+        args = line.split(' ')
+        try:
+            cls = HBNBCommand.find_class(args, objects)
+        except Exception as err:
+            print(err)
+            return
+        print(str(cls))
 
     def help_show(self):
         print("""
@@ -232,20 +223,23 @@ class>}, ...]
     @staticmethod
     def find_class(args=[], objects={}):
         try:
-            globals()[args[0]].__name__  # get class name
+            cls = globals()[args[0]]  # get class name
             ident= args[1]
         except KeyError:
-            raise IndexError("** class doesn't exist **")
+            raise KeyError("** class doesn't exist **")
+            return
         except IndexError:
             raise IndexError("** instance id missing **")
-        finally:
-            try:
-                objects["{}.{}".format(params['class'], params['id'])]
-#                   storage.all()[cls+'.'+ident]
-            except KeyError:
-                raise KeyError("** no instance found **")
-       
+            return
 
+        try:
+            obj = objects["{}.{}".format(cls.__name__, ident)]
+            print(obj)
+#                   storage.all()[cls+'.'+ident]
+        except KeyError:
+            raise KeyError("** no instance found **")
+            return
+        return cls(**obj)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
