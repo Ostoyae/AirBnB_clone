@@ -96,18 +96,17 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance
         based on class name and id
         """
-        objects = {"BaseModel.42": {"id": "42"}}
+        objects = {"BaseModel.42": {"id": "42"}}  # temp data
         if not line:
             print("** class name missing **")
-            return
-
-        args = line.split(' ')
-        try:
-            cls = HBNBCommand.find_class(args, objects)
-        except Exception as err:
-            print(err)
-            return
-        print(str(cls))
+        else:
+            args = line.split(' ')
+            try:
+                cls = HBNBCommand.__find_class(args, objects)
+            except Exception as err:
+                print(err)
+                return
+            print(str(cls))
 
     def help_show(self):
         print("""
@@ -186,9 +185,9 @@ class>}, ...]
         else:
             args = line.split(' ')
             try:
-                find_class(args, objects)
+                cls = HBNBCommand.__find_class(args, objects)
             except Exception as err:
-                print("err")
+                print(err)
                 return
             try:
                 args = args[2::]
@@ -221,7 +220,14 @@ class>}, ...]
         ''')
 
     @staticmethod
-    def find_class(args=[], objects={}):
+    def __find_class(args=[], objects={}):
+        """
+        This method check if an object exists in storage __objects if invalid
+        agrument are pass proper exceptions will be raise else if sucessful
+        will return a instance of the object
+
+        :return: instance of class
+        """
         try:
             cls = globals()[args[0]]  # get class name
             ident= args[1]
@@ -234,7 +240,6 @@ class>}, ...]
 
         try:
             obj = objects["{}.{}".format(cls.__name__, ident)]
-            print(obj)
 #                   storage.all()[cls+'.'+ident]
         except KeyError:
             raise KeyError("** no instance found **")
