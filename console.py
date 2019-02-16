@@ -102,12 +102,13 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(' ')
             try:
                 cls = globals()[args[0]].__name__
-                if args[1]:
-                    ident = args[1]
+                ident = args[1]
             except KeyError:
                 print("** class doesn't exist **")
+                return
             except IndexError:
                 print("** instance id missing **")
+                return
 
             try:
                 # temp until FileStorage is implmented
@@ -163,9 +164,9 @@ class HBNBCommand(cmd.Cmd):
         print('''
         Prints all string representation of all instances based or not on the
         class name
-        
+
         :params line: Name of Class
-        
+
         :usage:
 
         :example 1:
@@ -183,10 +184,38 @@ class>}, ...]
 
     def do_update(self, line):
         """
-        Updates an instance based on the class name and id by adding or updating
-        attribute (save the change into the JSON file)
+        Updates an instance based on the class name and id by adding or
+        updating attribute (save the change into the JSON file)
         """
-        pass
+        
+        objects = {"BaseModel.42": {"id": "42"}}
+        
+        if not line:
+            print("** class name missing **")
+        else:
+            args = line.split(' ')
+            try:
+                find_class(args, objects)
+            except Exception as err:
+                print("err")
+                return
+            try:
+                args = args[2::]
+            
+                for val, idx in enumerate(args): 
+                    try:
+                        if idx == 1:
+                            params['attr_n'] = val
+                        elif idx == 2:
+                            params['value'] = val
+                        else:
+                            raise IndexError
+                    except indexerror:
+                            print(error_msg[idx + 2])
+                            return
+            except Exception:
+                pass
+
 
     def help_update(self):
         print('''
@@ -199,6 +228,24 @@ class>}, ...]
 
         :return: None
         ''')
+
+    @staticmethod
+    def find_class(args=[], objects={}):
+        try:
+            globals()[args[0]].__name__  # get class name
+            ident= args[1]
+        except KeyError:
+            raise IndexError("** class doesn't exist **")
+        except IndexError:
+            raise IndexError("** instance id missing **")
+        finally:
+            try:
+                objects["{}.{}".format(params['class'], params['id'])]
+#                   storage.all()[cls+'.'+ident]
+            except KeyError:
+                raise KeyError("** no instance found **")
+       
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
