@@ -102,11 +102,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             args = line.split(' ')
             try:
-                cls = HBNBCommand.__find_class(args, objects)
+                (cls, cls_dict) = HBNBCommand.__find_class(args, objects)
             except Exception as err:
                 print(err)
                 return
-            print(str(cls))
+            print(str(cls(**cls_dict)))
 
     def help_show(self):
         print("""
@@ -179,29 +179,31 @@ class>}, ...]
         """
         
         objects = {"BaseModel.42": {"id": "42"}}
-        
+        attr = dict()
         if not line:
             print("** class name missing **")
         else:
             args = line.split(' ')
             try:
-                cls = HBNBCommand.__find_class(args, objects)
+                HBNBCommand.__find_class(args, objects)
             except Exception as err:
                 print(err)
                 return
             try:
                 args = args[2::]
-            
-                for val, idx in enumerate(args): 
+                if len(args) > 2:  # strip away any possible extra attributes
+                    args = args[:2]
+                for idx, val in enumerate(args):
+                    print(val)
                     try:
-                        if idx == 1:
-                            params['attr_n'] = val
-                        elif idx == 2:
-                            params['value'] = val
+                        if idx == 0:
+                            k = val
+                        elif idx == 1:
+                            v = val
                         else:
                             raise IndexError
                     except indexerror:
-                            print(error_msg[idx + 2])
+                            
                             return
             except Exception:
                 pass
@@ -224,9 +226,13 @@ class>}, ...]
         """
         This method check if an object exists in storage __objects if invalid
         agrument are pass proper exceptions will be raise else if sucessful
-        will return a instance of the object
+        will return a tuple of (class, dictionary representation)
 
-        :return: instance of class
+        Tuple:
+        0: Class 
+        1: Dictionary rep of object found in Objects.
+
+        :return: turple(Class, Dict)
         """
         try:
             cls = globals()[args[0]]  # get class name
@@ -244,7 +250,7 @@ class>}, ...]
         except KeyError:
             raise KeyError("** no instance found **")
             return
-        return cls(**obj)
+        return (cls , obj)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
