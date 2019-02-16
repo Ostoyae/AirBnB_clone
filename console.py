@@ -3,13 +3,21 @@
 Modules for HBNB console for the AirBnB clone project
 """
 import cmd
+import subprocess as sp
 from models.base_model import BaseModel
-# from models.city import City
+#from models.city import City
 from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
+    intro = "{}".format('''
+    Holberton bnb (hbnb) console.
+    version 0.0.1
+
+    Type help or ? for list of commands.
+    ''')
+
     '''
     objects = {
         "BaseModel.42": {"id": "42"},
@@ -58,6 +66,9 @@ class HBNBCommand(cmd.Cmd):
         :return: None
         """
         return True
+
+    def do_clear(self, line):
+        sp.call('clear', shell=True)
 
     """-------------------------AirBnB commands--------------------------"""
 
@@ -210,10 +221,10 @@ class>}, ...]
                     return
 
             cls = cls(**cls_dict)       # create a class with dict
-            cls.save()                  # Update 'update_at' attribute
+            cls.save()                  # Update 'updated_at' attribute
             cls_dict = cls.to_dict()    # convert class into Dict rep
+            print(cls_dict)
             cls_dict.update({k: v})     # update/insert requested attribute
-
             self.objects[ident].update(cls_dict)  # update Objects
             print(self.objects)
 
