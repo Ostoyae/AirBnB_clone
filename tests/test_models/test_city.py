@@ -15,3 +15,6 @@ class TestCity(unittest.TestCase):
 
     def test_init(self):
         self.assertTrue(isinstance(self.city, City))
+
+    def test_test(self):
+        pass
