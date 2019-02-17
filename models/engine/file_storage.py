@@ -3,12 +3,12 @@
 FileStorage class is the backbone
 of the file storage engine.
 """
-from models.amenity import Amenity
-from models.base_model import BaseModel
-from models.city import City
-from models.place import Place
-from models.reviews import Reviews
-from models.state import State
+#from models.amenity import Amenity
+#from models.base_model import BaseModel
+#from models.city import City
+#from models.place import Place
+#from models.reviews import Reviews
+#from models.state import State
 import json
 
 
@@ -25,14 +25,14 @@ class FileStorage():
     def all(self):
         """Returns `objects` class attr."""
 
-        return __objects
+        return self.__objects
 
     def new(self, obj):
         """Method that writes classname.id to dictionary."""
 
         if obj is not None:
-            key = self.__class__.__name__ + "." + obj.id
-            __objects[key] = obj
+            key = obj.__class__.__name__ + "." + obj.id
+            self.__objects[key] = obj.to_dict()
 
     def save(self):
         """Serializes `__objects` to JSON file path"""
@@ -41,7 +41,7 @@ class FileStorage():
 
         with open(self.__file_path, "w", encoding="utf-8") as f:
             for key, value in self.__objects.items():
-                to_save[key] = value.to_dict()
+                to_save[key] = value
 
             json.dump(to_save, f)
 
