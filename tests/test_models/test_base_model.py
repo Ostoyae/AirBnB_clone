@@ -11,7 +11,24 @@ import pep8
 import sys
 import os
 
+
 class TestBaseModel(unittest.TestCase):
+
+    def setUp(self):
+        """
+        Creates an instance
+        and check if it is
+        a class or not.
+        """
+        base_model = BaseModel()
+
+    def tearDown(self):
+        """
+        Cleans up test method
+        after done.
+        """
+
+        del self
 
     def check_documentation(self):
         """
@@ -24,7 +41,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(__init__.__doc__)
         self.assertIsNotNone(__str__.__doc__)
         self.assertIsNotNone(save.__doc__)
-        self.assertIsNotNone(to_dict.__doc__) 
+        self.assertIsNotNone(to_dict.__doc__)
 
     def test_base_pep8(self):
         """
@@ -32,7 +49,8 @@ class TestBaseModel(unittest.TestCase):
         """
 
         pep8style = pep8.StyleGuide(quiet=True)
-        result = pep8style.check_files(["tests/test_models/test_base_model.py"])
+        result = pep8style.check_files([
+            "tests/test_models/test_base_model.py"])
         self.assertEqual(result.total_errors, 0, "PEP8 failure...")
         result = pep8style.check_files(["models/base_model.py"])
         self.assertEqual(result.total_errors, 0, "PEP8 failure...")
@@ -47,21 +65,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(hasattr(BaseModel, "__str__"))
         self.assertTrue(hasattr(BaseModel, "save"))
         self.assertTrue(hasattr(BaseModel, "to_dict"))
-
-    def setUpClass(self):
-        """
-        Creates an instance
-        and check if it is
-        a class or not.
-        """
-
-        base_model = BaseModel()
-        
-    def test_instantization(self):
-        """todo"""
-
-    def tearDownClass(self):
-        del self.base_model
 
     def test_instance_created(self):
         """
@@ -90,7 +93,7 @@ class TestBaseModel(unittest.TestCase):
         """
 
         base_model = BaseModel()
-        self.assertTrue(base_model.created_at, datetime.datetime)
+        self.assertTrue(base_model.created_at, datetime.date)
 
     def test_updated_type(self):
         """
@@ -99,7 +102,7 @@ class TestBaseModel(unittest.TestCase):
         """
 
         base_model = BaseModel()
-        self.assertTrue(base_model.updated_at, datetime.datetime)
+        self.assertTrue(base_model.updated_at, datetime.date)
 
     def test_baseclass_attrs_type(self):
         """
@@ -123,10 +126,12 @@ class TestBaseModel(unittest.TestCase):
         """
 
         base_class = BaseModel()
-        rep = "[{}] ({}) <{}>".format(
-        self.__class__.__name__, self.id, self.__dict__)
-
-        self.assertEqual(str(base_class), rep)
+        cn = base_class.__class__.__name__
+        cid = base_class.id
+        attrs = base_class.__dict__
+        self.assertTrue(type(cn), str)
+        self.assertTrue(type(cid), str)
+        self.assertTrue(type(attrs), dict)
 
     def test_save(self):
         """
@@ -146,7 +151,8 @@ class TestBaseModel(unittest.TestCase):
         """
 
         base_class = BaseModel()
-        self.assertIsInstance(base_class, dict)
+        bc = base_class.to_dict()
+        self.assertIsInstance(bc, dict)
 
     def test_to_dict_attrs(self):
         """
@@ -155,8 +161,9 @@ class TestBaseModel(unittest.TestCase):
         """
 
         base_class = BaseModel()
-        a1 = base_class["created_at"]
-        a2 = base_class["updated_at"]
+        attrs = base_class.to_dict()
+        a1 = attrs["created_at"]
+        a2 = attrs["updated_at"]
 
         self.assertIsInstance(a1, str)
         self.assertIsInstance(a2, str)
@@ -170,7 +177,7 @@ class TestBaseModel(unittest.TestCase):
         base_class = BaseModel()
         method = base_class.to_dict()
         value = method["__class__"]
-        assertIsInstance(value, str)
+        self.assertIsInstance(value, str)
 
     def test_load_from_dict(self):
         """
@@ -179,7 +186,6 @@ class TestBaseModel(unittest.TestCase):
         """
 
         base_class = BaseModel()
-        mi = base_class.to_dict() #method
-        kw = method(**method_instance) #kwargs
-
-        assertDictInstance(mi.__dict__, kw.__dict__)
+        mi = base_class.to_dict()
+        kw = BaseModel(**mi)
+        self.assertDictEqual(base_class.__dict__, kw.__dict__)
