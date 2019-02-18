@@ -39,11 +39,11 @@ class FileStorage():
 
         to_save = {}
 
-        with open(self.__file_path, "w", encoding="utf-8") as f:
+        with open(self.__file_path, "w", encoding="utf-8") as fp:
             for key, value in self.__objects.items():
                 to_save[key] = value
 
-            json.dump(to_save, f)
+            json.dump(to_save, fp)
 
     def reload(self):
         """
