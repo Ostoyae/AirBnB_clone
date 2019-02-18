@@ -41,7 +41,6 @@ class BaseModel():
             storage.new(self)
 #           storage.save()
 
-
     def __str__(self):
         """Returns string repr. of `BaseClass` model."""
 
