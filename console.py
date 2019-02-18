@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
             try:
                 (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
             except Exception as err:
-                print(err)
+                print(str(err)[1:-1])
                 return
             print(str(cls(**cls_dict)))
 
@@ -160,7 +160,10 @@ class HBNBCommand(cmd.Cmd):
                     obj = globals()[v['__class__']](**v)
                     ls_d.append(str(obj))
                     del obj
-        print(ls_d)
+        if ls_d:
+            print(ls_d)
+        else:
+            print("** class doen't exist **")
 
     def help_all(self):
         print('''
@@ -242,6 +245,7 @@ class>}, ...]
     def do_destroy(self, line):
         if not line:
             print("** class name missing **")
+            return
         else:
             args = line.split(' ')
             try:
@@ -287,7 +291,7 @@ class>}, ...]
             obj = objects["{}.{}".format(cls.__name__, ident)]
 #                   storage.all()[cls+'.'+ident]
         except KeyError:
-            raise KeyError("** no instance found **")
+            raise KeyError('** no instance found **')
             return
         return (cls, obj)
 
