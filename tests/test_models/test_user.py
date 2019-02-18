@@ -15,6 +15,9 @@ class TestUser(unittest.TestCase):
     def setUp(self):
         self.objects = storage.all()
 
+    def test_class(self):
+        self.assertTrue(isinstance(self.user, User))
+    
     def test_field_first_name(self):
         d = self.objects[self.uid]
         self.assertTrue(any(k == 'first_name' for k in d.keys()))
@@ -31,3 +34,8 @@ class TestUser(unittest.TestCase):
         d = self.objects[self.uid]
         self.assertTrue(any(k == 'password' for k in d.keys()))
 
+    def test_update(self):
+        cur_time = self.objects[self.uid]['updated_at']
+	self.user.save()
+        new_time = self.user.to_dict()['updated_at']
+        self.assertNotEqual(cur_time, new_time)
