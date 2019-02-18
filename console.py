@@ -157,8 +157,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             if self.objects:
                 for key, v in self.objects.items():
-                    arg = key.split('.')
-                    obj = globals()[arg[0]](**v)
+                    obj = globals()[v['__class__']](**v)
                     ls_d.append(str(obj))
                     del obj
         print(ls_d)
