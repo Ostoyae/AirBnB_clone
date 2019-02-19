@@ -188,7 +188,6 @@ class HBNBCommand(cmd.Cmd):
 
         self.get_all(obj[0], False)
 
-        
     def count(self, obj):
         """
         Subclass action method for count the number of the Class currently
@@ -373,7 +372,7 @@ class HBNBCommand(cmd.Cmd):
                 for i, v in enumerate(ls_d):
                     print(v, end='{}'.format(
                         ', ' if i < (len(ls_d) - 1) else '')
-                        )
+                    )
                 print(']')
             return count
         else:
