@@ -22,11 +22,25 @@ class FileStorage():
         return self.__objects
 
     def new(self, obj):
-        """Method that writes classname.id to dictionary."""
+        """Method that writes classname.id to dictionary.
+
+        Args:
+            obj: Object class to serialize to json.
+        """
 
         if obj is not None:
             key = obj.__class__.__name__ + "." + obj.id
-            self.__objects[key] = obj.to_dict()
+            base = obj.to_dict()
+
+            if obj.__class__.__name__ is not 'BaseModel':
+                pub_cls = {
+                    k: v
+                    for k, v in obj.__class__.__dict__.items()
+                    if '__' not in k
+                }
+                base.update(pub_cls)
+
+            self.__objects.update({key: base})
 
     def save(self):
         """Serializes `__objects` to JSON file path"""
