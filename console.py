@@ -186,6 +186,7 @@ class HBNBCommand(cmd.Cmd):
             None
         """
 
+
         self.get_all(obj[0], False)
 
     def count(self, obj):
