@@ -40,3 +40,8 @@ class TestUser(unittest.TestCase):
         self.user.save()
         new_time = self.user.to_dict()['updated_at']
         self.assertNotEqual(cur_time, new_time)
+
+    def test_load_from_dict(self):
+        new = User(**self.objects[self.uid])
+        self.assertEqual(new.id, self.user.id)
+
