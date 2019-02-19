@@ -19,6 +19,36 @@ class TestCity(unittest.TestCase):
     def setUp(self):
         self.objects = storage.all()
 
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+
+        except FileNotFoundError:
+            pass
+
+    def test_style_check(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        p = pep8style.check_files(['models/city.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
+
+    def test_attr(self):
+        self.assertTrue('id' in self.city.__dict__)
+        self.assertTrue('created_at' in self.city.__dict__)
+        self.assertTrue('updated_at' in self.city.__dict__)
+        self.assertTrue('name' in self.city.__dict__)
+
+    def test_documentation(self):
+        self.assertIsNotNone(Amenity.__doc__)
+
+    def test_class(self):
+        self.assertTrue(isinstance(self.city, Amenity))
+
+    def test_id(self):
+        self.assertTrue(type(self.city.id), int)
+
+    def test_name(self):
+        self.assertTrue(type(self.city.name), str)
+
     def test_class(self):
         self.assertTrue(isinstance(self.city, City))
 
