@@ -186,7 +186,7 @@ class HBNBCommand(cmd.Cmd):
             None
         """
 
-        class_name = self.get_instances(obj[0])
+        class_name = self.get_all(obj[0])
         print(class_name)
 
         
