@@ -5,8 +5,8 @@ from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """Class for Review Object
-    Inherts from BaseModel
+    """
+    Defines public attribute for class Review
     """
 
     place_id = ""

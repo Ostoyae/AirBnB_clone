@@ -5,8 +5,8 @@ from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """Class for Place Object
-    Inherts from BaseModel
+    """
+    Defines public attribute for class Place
     """
 
     city_id = ""

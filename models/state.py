@@ -5,8 +5,8 @@ from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """Class for State Object
-    Inherts from BaseModel
+    """
+    Defines public attribute for class State
     """
 
     name = ""
