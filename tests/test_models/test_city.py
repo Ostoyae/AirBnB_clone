@@ -5,6 +5,7 @@ Test module for City class
 
 import unittest
 from models.city import City
+from models import storage
 
 
 class TestCity(unittest.TestCase):
@@ -12,26 +13,37 @@ class TestCity(unittest.TestCase):
     Unittest for City class.
     """
 
+    city = City()
+    o_id = '{}.{}'.format('City', city.id)
+
     def setUp(self):
-        """
-        Create an instance.
-        """
+        self.objects = storage.all()
 
-        self.city = City()
-
-    def tearDown(self):
-        """
-        Clean up instance.
-        """
-
-        del self.city
-
-    def test_init(self):
-        """
-        Test instance created.
-        """
-
+    def test_class(self):
         self.assertTrue(isinstance(self.city, City))
 
-    def test_test(self):
-        pass
+    def test_name(self):
+        d = self.objects[self.o_id]
+        self.assertTrue(any(k == 'name' for k in d.keys()))
+
+    def test_field_state_id(self):
+        d = self.objects[self.o_id]
+        self.assertTrue(any(k == 'state_id' for k in d.keys()))
+
+    def test_update(self):
+        cur_time = self.objects[self.o_id]['updated_at']
+        self.city.save()
+        new_time = self.city.to_dict()['updated_at']
+        self.assertNotEqual(cur_time, new_time)
+
+    def test_load_from_dict(self):
+        new = City(**self.objects[self.o_id])
+        self.assertEqual(new.to_dict(), self.objects[self.o_id])
+
+    def test_no_private_attrs(self):
+        for k in self.objects[self.o_id].keys():
+            if k is not '__class__':
+                self.assertTrue(('__' not in k))
+
+    def test_class_attr(self):
+        self.assertEqual(self.objects[self.o_id]['__class__'], 'City')
