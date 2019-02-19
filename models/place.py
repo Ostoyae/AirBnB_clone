@@ -1,12 +1,14 @@
 #!/usr/bin/python3
-""" Modules for Place Class
+"""
+Modules for Place Class
 """
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """Class for Place Object
+    """
     Inherts from BaseModel
+    and represents host unit.
     """
 
     city_id = ""
