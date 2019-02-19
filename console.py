@@ -5,11 +5,16 @@ Modules for HBNB console for the AirBnB clone project
 import cmd
 import subprocess as sp
 from models.base_model import BaseModel
+from models.user import User
 #from models.city import City
 from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
+    """
+    Class that the console derives from.
+    """
+
     prompt = '(hbnb) '
     intro = "{}".format('''
     Holberton bnb (hbnb) console.
@@ -18,40 +23,51 @@ class HBNBCommand(cmd.Cmd):
     Type help or ? for list of commands.
     ''')
 
-    '''
-    objects = {
-        "BaseModel.42": {"id": "42"},
-        "BaseModel.1337": {"id": "1337"},
-        "City.101": {"id": "101"}
-    }
-    '''
     objects = storage.all()
 
+#   Allow on these classes to be made.
+    validate = [
+        'BaseModel',
+        'User',
+        'City',
+        'State',
+        'Place',
+        'Amenity',
+        'Review'
+    ]
+
     def help_help(self):
-        print('\n'.join([
-            'provied details on a command',
-            'Usage:'
-            '\n\thelp <cmd>'
-        ]))
+        """ prints help details """
+        print('''
+        provied details on a command
+            
+        Usage:
+            $ help <cmd>
+        ''')
 
     def help_EOF(self):
+        """ prints help details
+        """
         print('\n'.join([
             'Quit command to exit the program\n',
         ]))
 
     def help_quit(self):
+        """ prints help details"""
         print('\n'.join([
             'Quit command to exit the program\n',
         ]))
 
     def emptyline(self):
+        """ pass if emptyline """
         pass
 
     def do_EOF(self, line):
         """
         Quits the console
 
-        :param line: Unsued
+        Args:
+            line: Unsued
 
         :return: None
         """
@@ -61,14 +77,30 @@ class HBNBCommand(cmd.Cmd):
         """
         Quits the console
 
-        :param line: Unsued
+        Args:
+            line: Unsued
 
         :return: None
         """
         return True
 
     def do_clear(self, line):
+        """ clears prompt """
         sp.call('clear', shell=True)
+
+    def help_clear(self):
+        """ prints help details"""
+        print('''
+        Clears prompt
+        ''')
+
+    def help_list(self):
+        """ prints help details"""
+        print('''
+        List of Classes
+        ''')
+        for c in self.validate:
+            print('\t - {}'.format(c))
 
     """-------------------------AirBnB commands--------------------------"""
 
@@ -77,13 +109,15 @@ class HBNBCommand(cmd.Cmd):
         creates an instance of a class and then
         print the ID of said new class
 
-        :param line: Name of class to create.
+        Args:
+            line: string from stdin, should be name of Class to create
 
         :return: None
         """
 
         if line:
             try:
+                assert line in self.validate
                 cls = globals()[line]
                 obj = cls()
                 print(obj.id)
@@ -103,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
 
         :usage:
             $ create <class name>
-            <class id>
+        
         :example"
             $ create BaseModel
             <class id>
@@ -115,6 +149,12 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints the string representation of an instance
         based on class name and id
+
+        Args:
+            line: string from stdin
+
+        Returns:
+            None
         """
         if not line:
             print("** class name missing **")
@@ -138,13 +178,20 @@ class HBNBCommand(cmd.Cmd):
             $ show <class name>.id
             $ [class] (id) {<dict of class>}
 
-        :return: None
+        Return: 
+            None
         """)
 
     def do_all(self, line=None):
         """
         Prints all string representation of all instances based or not on the
         class name
+
+        Args:
+            line: string from stdin
+
+        Returns:
+            None
         """
         ls_d = list()
         if line:
@@ -172,7 +219,10 @@ class HBNBCommand(cmd.Cmd):
 
         :params line: Name of Class
 
-        :usage:
+        :usage: 
+            $ all
+        or
+            $ all <Class Name>
 
         :example 1:
             $ all
@@ -193,7 +243,6 @@ class>}, ...]
         updating attribute (save the change into the JSON file)
         """
 
-#       objects = {"BaseModel.42": {"id": "42"}}
         attr = dict()
         if not line:
             print("** class name missing **")
@@ -232,17 +281,25 @@ class>}, ...]
 
     def help_update(self):
         print('''
+        Update a class base on id with the given field and value.
+
         :params line: Class id and field to update
 
         :Usage:
-            $ update <class name> <id> <attribute name> "<attribute value>"
-
-        TODO
+            $ update <class name> <id> <attribute name> <attribute value>
 
         :return: None
         ''')
 
     def do_destroy(self, line):
+        """
+        Destroy a Class base off name and id
+
+        :ussage:
+            $ destroy <class name> <id>
+
+        :return: None
+        """
         if not line:
             print("** class name missing **")
             return
@@ -259,9 +316,10 @@ class>}, ...]
 
     def help_destroy(self):
         print('''
-            destroy stuff
+            destroy a class base off name and id
 
             :usage:
+                $ destroy <class name> <id>
                 ''')
 
     @staticmethod
@@ -291,10 +349,13 @@ class>}, ...]
             obj = objects["{}.{}".format(cls.__name__, ident)]
 #                   storage.all()[cls+'.'+ident]
         except KeyError:
-            raise KeyError('** no instance found **')
+            raise KeyError("** no instance found **")
             return
         return (cls, obj)
 
 
 if __name__ == '__main__':
+    """ 
+    Entry point for console
+    """
     HBNBCommand().cmdloop()
