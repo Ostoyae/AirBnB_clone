@@ -186,10 +186,9 @@ class HBNBCommand(cmd.Cmd):
             None
         """
 
-        class_name = self.get_all(obj[0])
-        print(class_name)
 
-        
+        self.get_all(obj[0], False)
+
     def count(self, obj):
         """
         Subclass action method for count the number of the Class currently
@@ -333,7 +332,7 @@ class HBNBCommand(cmd.Cmd):
         """
         self.get_all(line)
 
-    def get_all(self, line=None):
+    def get_all(self, line=None, as_str=True):
         """
         Stores class attributes in a list
         organized according to their corresponding
@@ -341,6 +340,7 @@ class HBNBCommand(cmd.Cmd):
 
         Args:
             line: Classname of string type from STDIN.
+            as_str: picks which STDOUT format to use.
 
         Returns:
             Int: count
@@ -366,46 +366,19 @@ class HBNBCommand(cmd.Cmd):
                     del obj
 
         if ls_d:
-            print(ls_d)
+            if as_str:
+                print(ls_d)
+            else:
+                print('[', end='')
+                for i, v in enumerate(ls_d):
+                    print(v, end='{}'.format(
+                        ', ' if i < (len(ls_d) - 1) else '')
+                    )
+                print(']')
             return count
         else:
             print("** class doen't exist **")
 
-    def get_instances(self, line=None):
-        """
-        Stores class attributes in a list
-        organized according to their corresponding
-        class.
-
-        Args:
-            line: Classname of string type from STDIN.
-
-        Returns:
-            None
-        """
-
-        ls_d = list()
-
-        if line:
-            for k, v in self.objects.items():
-                if k.startswith(line):
-                    obj = globals()[line](**v)
-                    ls_d.append(str(obj))
-                    del obj
-
-        else:
-            if self.objects:
-                for k, v in self.objects.items():
-                    obj = globals()[v['__class__']](**v)
-                    ls_d.append(str(obj))
-                    del obj
-
-        if ls_d:
-            print(ls_d)
-
-        else:
-            print("** class doen't exist **")
-    
     def help_all(self):
         """
         Prints out help details
