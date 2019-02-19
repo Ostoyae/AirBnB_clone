@@ -122,8 +122,7 @@ class HBNBCommand(cmd.Cmd):
                 obj = cls()
                 print(obj.id)
                 storage.save()
-            except Exception as err:
-                print(err)
+            except Exception:
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
@@ -162,8 +161,7 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(' ')
             try:
                 (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
-            except Exception as err:
-                print(str(err)[1:-1])
+            except Exception:
                 return
             print(str(cls(**cls_dict)))
 
@@ -251,8 +249,7 @@ class>}, ...]
             try:
                 (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
                 ident = "{}.{}".format(args[0], args[1])
-            except Exception as err:
-                print(err)
+            except Exception:
                 return
 
             args = args[2::]
@@ -307,8 +304,7 @@ class>}, ...]
             args = line.split(' ')
             try:
                 HBNBCommand.__find_class(args, self.objects)
-            except Exception as err:
-                print(err)
+            except Exception:
                 return
         ident = "{}.{}".format(args[0], args[1])
         self.objects.pop(ident)
@@ -339,17 +335,20 @@ class>}, ...]
             cls = globals()[args[0]]  # get class name
             ident = args[1]
         except KeyError:
-            raise KeyError("** class doesn't exist **")
+            print("** class doesn't exist **")
+            raise KeyError
             return
         except IndexError:
-            raise IndexError("** instance id missing **")
+            print("** instance id missing **")
+            raise IndexError
             return
 
         try:
             obj = objects["{}.{}".format(cls.__name__, ident)]
 #                   storage.all()[cls+'.'+ident]
         except KeyError:
-            raise KeyError("** no instance found **")
+            print("** no instance found **")
+            raise KeyError
             return
         return (cls, obj)
 
