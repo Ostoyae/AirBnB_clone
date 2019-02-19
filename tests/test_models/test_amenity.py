@@ -20,8 +20,35 @@ class TestAmenity(unittest.TestCase):
     def setUp(self):
         self.objects = storage.all()
 
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+
+        except FileNotFoundError:
+            pass
+
+    def test_style_check(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        p = pep8style.check_files(['models/amenity.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
+
+    def test_attr(self):
+        self.assertTrue('id' in self.amenity.__dict__)
+        self.assertTrue('created_at' in self.amenity.__dict__)
+        self.assertTrue('updated_at' in self.amenity.__dict__)
+        self.assertTrue('name' in self.amenity.__dict__)
+
+    def test_documentation(self):
+        self.assertIsNotNone(Amenity.__doc__)
+
     def test_class(self):
         self.assertTrue(isinstance(self.amenity, Amenity))
+
+    def test_id(self):
+        self.assertTrue(type(self.amenity.id), int)
+
+    def test_name(self):
+        self.assertTrue(type(self.amenity.name), str)
 
     def test_field_name(self):
         d = self.objects[self.o_id]
