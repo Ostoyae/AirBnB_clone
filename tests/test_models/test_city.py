@@ -6,6 +6,7 @@ Test module for City class
 import unittest
 from models.city import City
 
+
 class TestCity(unittest.TestCase):
     """
     Unittest for City class.
