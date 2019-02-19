@@ -4,6 +4,9 @@ Modules for HBNB console for the AirBnB clone project
 """
 import cmd
 import subprocess as sp
+import re
+import contextlib
+import io
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -148,6 +151,58 @@ class HBNBCommand(cmd.Cmd):
         for c in self.validate:
             print('\t - {}'.format(c))
 
+    def precmd(self, line):
+        """
+        Method executed just before the command line `line` is interpreted,
+        This method will Check if the user Want to use a Subclass action on a
+        Class instance
+
+        Args:
+            line: Classname of string type from STDIN.
+
+        Returns:
+            processed string of type String
+        """
+        parse = re.split(r"[.()]", line.strip())
+        if parse[0] in self.validate and len(parse) > 1:
+            try:
+                self.__class__.__dict__[parse[1]](self, parse)
+            except KeyError:
+                return ''  # invokes emptyline
+            return ''  # invokes emptyline
+
+        return line.strip()  # sends line onto cmd.onecmd() as inteneded
+
+    def count(self, obj):
+        """
+        Subclass action method for count the number of the Class currently
+        existing.
+
+        Args:
+            obj: List of a parsed line [0: ClassName]
+
+        Return:
+            None
+        """
+
+        count = 0
+        with contextlib.redirect_stdout(io.StringIO()):  # supresses print()
+            count = self.get_all(obj[0])
+        print(count)
+
+    def destroy(self, obj):
+        """
+        Subclass action method for destroy a Class that currently exists via id
+
+        Args:
+            obj: List of a parse line [0: Classname, 1: action, 2: Id]
+
+        Return:
+            None
+        """
+
+        print('unimplmented')
+
     """-------------------------AirBnB commands--------------------------"""
 
     def do_create(self, line):
@@ -251,6 +306,18 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line=None):
         """
+        Wrapper function for `all` for that the console.
+
+        Args:
+            line: Classname of string type from STDIN
+
+        Returns:
+            None
+        """
+        self.get_all(line)
+
+    def get_all(self, line=None):
+        """
         Stores class attributes in a list
         organized according to their corresponding
         class.
@@ -259,16 +326,18 @@ class HBNBCommand(cmd.Cmd):
             line: Classname of string type from STDIN.
 
         Returns:
-            None
+            Int: count
         """
 
         ls_d = list()
+        count = 0
 
         if line:
             for k, v in self.objects.items():
                 if k.startswith(line):
                     obj = globals()[line](**v)
                     ls_d.append(str(obj))
+                    count += 1
                     del obj
 
         else:
@@ -276,11 +345,12 @@ class HBNBCommand(cmd.Cmd):
                 for k, v in self.objects.items():
                     obj = globals()[v['__class__']](**v)
                     ls_d.append(str(obj))
+                    count += 1
                     del obj
 
         if ls_d:
             print(ls_d)
-
+            return count
         else:
             print("** class doen't exist **")
 
