@@ -3,6 +3,7 @@
 """
 from models.base_model import BaseModel
 
+
 class City(BaseModel):
     """Class for City Object
     Inherts from BaseModel
@@ -10,6 +11,3 @@ class City(BaseModel):
 
     state_id = ""
     name = ""
-
-    def __init__(self):
-        pass
