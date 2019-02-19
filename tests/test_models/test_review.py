@@ -6,8 +6,12 @@ Test module for Review class.
 import unittest
 from models.review import Review
 
+
 class TestReview(unittest.TestCase):
-    
+    """
+    Unittest for Review class.
+    """
+
     def setUp(self):
         """
         Create an instance.
