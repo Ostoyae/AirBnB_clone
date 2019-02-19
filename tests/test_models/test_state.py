@@ -19,6 +19,36 @@ class TestState(unittest.TestCase):
     def setUp(self):
         self.objects = storage.all()
 
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+
+        except FileNotFoundError:
+            pass
+
+    def test_style_check(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        p = pep8style.check_files(['models/user.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
+
+    def test_attr(self):
+        self.assertTrue('id' in self.user.__dict__)
+        self.assertTrue('created_at' in self.user.__dict__)
+        self.assertTrue('updated_at' in self.user.__dict__)
+        self.assertTrue('name' in self.user.__dict__)
+
+    def test_documentation(self):
+        self.assertIsNotNone(State.__doc__)
+
+    def test_class(self):
+        self.assertTrue(isinstance(self.user, State))
+
+    def test_id(self):
+        self.assertTrue(type(self.user.id), int)
+
+    def test_name(self):
+        self.assertTrue(type(self.user.name), str)
+
     def test_class(self):
         self.assertTrue(isinstance(self.user, State))
 
