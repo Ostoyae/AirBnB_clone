@@ -38,10 +38,10 @@ class TestCity(unittest.TestCase):
         self.assertTrue('name' in self.city.__dict__)
 
     def test_documentation(self):
-        self.assertIsNotNone(Amenity.__doc__)
+        self.assertIsNotNone(City.__doc__)
 
     def test_class(self):
-        self.assertTrue(isinstance(self.city, Amenity))
+        self.assertTrue(isinstance(self.city, City))
 
     def test_id(self):
         self.assertTrue(type(self.city.id), int)
