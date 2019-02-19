@@ -16,6 +16,36 @@ class TestPlace(unittest.TestCase):
     def setUp(self):
         self.objects = storage.all()
 
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+
+        except FileNotFoundError:
+            pass
+
+    def test_style_check(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        p = pep8style.check_files(['models/place.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
+
+    def test_attr(self):
+        self.assertTrue('id' in self.place.__dict__)
+        self.assertTrue('created_at' in self.place.__dict__)
+        self.assertTrue('updated_at' in self.place.__dict__)
+        self.assertTrue('name' in self.place.__dict__)
+
+    def test_documentation(self):
+        self.assertIsNotNone(Place.__doc__)
+
+    def test_class(self):
+        self.assertTrue(isinstance(self.place, Place))
+
+    def test_id(self):
+        self.assertTrue(type(self.place.id), int)
+
+    def test_name(self):
+        self.assertTrue(type(self.place.name), str)
+
     def test_class(self):
         self.assertTrue(isinstance(self.place, Place))
 
@@ -59,9 +89,9 @@ class TestPlace(unittest.TestCase):
         d = self.objects[self.o_id]
         self.assertTrue(any(k == 'longitude' for k in d.keys()))
 
-    def test_field_amenity_ids(self):
+    def test_field_place_ids(self):
         d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'amenity_ids' for k in d.keys()))
+        self.assertTrue(any(k == 'place_ids' for k in d.keys()))
 
     def test_update(self):
         cur_time = self.objects[self.o_id]['updated_at']
