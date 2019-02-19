@@ -11,7 +11,7 @@ class TestCity(unittest.TestCase):
     """
     Unittest for City class.
     """
-    
+
     def setUp(self):
         """
         Create an instance.
