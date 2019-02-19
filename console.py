@@ -163,6 +163,7 @@ class HBNBCommand(cmd.Cmd):
         Returns:
             processed string of type String
         """
+
         parse = re.split(r"[.()]", line.strip())
         if parse[0] in self.validate and len(parse) > 1:
             try:
@@ -173,6 +174,22 @@ class HBNBCommand(cmd.Cmd):
 
         return line.strip()  # sends line onto cmd.onecmd() as inteneded
 
+    def all(self, obj):
+        """
+        Subclass action method for displaying all of the instances
+        of a class.
+
+        Args:
+            obj: List of a parsed line [0: Classname, 1: action]
+
+        Return:
+            None
+        """
+
+        class_name = self.get_instances(obj[0])
+        print(class_name)
+
+        
     def count(self, obj):
         """
         Subclass action method for count the number of the Class currently
@@ -354,6 +371,41 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doen't exist **")
 
+    def get_instances(self, line=None):
+        """
+        Stores class attributes in a list
+        organized according to their corresponding
+        class.
+
+        Args:
+            line: Classname of string type from STDIN.
+
+        Returns:
+            None
+        """
+
+        ls_d = list()
+
+        if line:
+            for k, v in self.objects.items():
+                if k.startswith(line):
+                    obj = globals()[line](**v)
+                    ls_d.append(str(obj))
+                    del obj
+
+        else:
+            if self.objects:
+                for k, v in self.objects.items():
+                    obj = globals()[v['__class__']](**v)
+                    ls_d.append(str(obj))
+                    del obj
+
+        if ls_d:
+            print(ls_d)
+
+        else:
+            print("** class doen't exist **")
+    
     def help_all(self):
         """
         Prints out help details
