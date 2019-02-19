@@ -1,13 +1,11 @@
 #!/usr/bin/python3
-""" Modules for Place Class
+"""
+Modules for Place Class
 """
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """
-    Defines public attribute for class Place
-    """
 
     city_id = ""
     user_id = ""

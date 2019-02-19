@@ -14,7 +14,11 @@ import pep8
 import sys
 import os
 
+
 class TestFileStorage(unittest.TestCase):
+    """
+    Unitest for FileStorage class.
+    """
 
     @classmethod
     def setUp(cls):
@@ -24,10 +28,11 @@ class TestFileStorage(unittest.TestCase):
         or not.
         """
 
-        cls.fs = FileStorage()
-        cls.fs.place_id = "San Francisco"
-        cls.fd.user_id = "Jack Dorsey"
-        cls.fs.text = "tweet"
+        cls.usr = User()
+        cls.usr.first_name = "Nunya"
+        cls.usr.last_name = "Beezwax"
+        cls.usr.email = "nyb@gmail.com"
+        cls.storage = FileStorage()
 
     @classmethod
     def tearDown(self):
@@ -36,7 +41,7 @@ class TestFileStorage(unittest.TestCase):
         JSON file after done.
         """
 
-        del fs
+        del cls.usr
 
     def tearDown(self):
         """
@@ -46,7 +51,8 @@ class TestFileStorage(unittest.TestCase):
         try:
             os.remove("file.json")
 
-        except: pass
+        except:
+            pass
 
     def check_documentation(self):
         """
@@ -68,9 +74,7 @@ class TestFileStorage(unittest.TestCase):
 
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files([
-            "tests/test_models/test_file_engine.py"])
-        self.assertEqual(result.total_errors, 0, "PEP8 failure...")
-        result = pep8style.check_files(["models/engine/file_storage/file_storage.py"])
+            "models/engine/file_storage/file_storage.py"])
         self.assertEqual(result.total_errors, 0, "PEP8 failure...")
 
     def test_methods_exist(self):
@@ -90,7 +94,6 @@ class TestFileStorage(unittest.TestCase):
         and attributs created.
         """
 
-        
         fs = FileStorage()
         self.assertIsInstance(fs, FileStorage)
 
@@ -101,9 +104,10 @@ class TestFileStorage(unittest.TestCase):
         """
 
         fs = FileStorage()
-        dic = fs.all()
-        self.assertNotNone(dic)
-        self.assertTrue(dic, self._FileStorage__objects)
+        dic = fstorage.all()
+        self.assertIsNotNone(dic)
+        self.assertEqual(type(dic), dict)
+        self.assertIs(dic, fs._FileStorage__objects)
 
     def test_new(self):
         """
@@ -114,39 +118,51 @@ class TestFileStorage(unittest.TestCase):
         fs = FileStorage()
         dic = fs.all()
         subcls = City()
-        subcls.state_id = "CA"
+        subcls.id = 94061
         subcls.name = "San Francisco"
-        key = subcls.__class____name__ + "." + subcls.state_id
-        self.assertTrue(type(key), str)
+        fs.new(subcls)
+        key = subcls.__class__.__name__ + "." + subcls.state_id
         self.assertIsNotNone(dic[key])
-
-    def test_save(self):
-        """
-        Test that `save` method wrote
-        `__objects` to the file.
-        """
-
-        fs = FileStorage()
-        fp = self._FileStorage__file_path
-        existance = os.path.isfile(self._FileStorage__file_path)
-        self.assertEqual(existance, True)
-        self.assertIsNotNone(fp)
 
     def test_reload(self):
         """
-        Test that `reload` method 
-        created an instance from 
+        Test that `reload` method
+        created an instance from
         the file.
         """
 
-        fs = FileStorage()
-        fp = self._FileStorage__file_path
-        existance = os.path.isfile(fp)
-        self.assertEqual(existance, True)
+        self.storage.save()
+        directory = os.path.dirname(os.path.abspath("console.py"))
+        fp = os.path.join(directory, "file.json")
 
         with open(fp, encoding="utf-8") as f:
-            f.write("{}")
+            handler = f.readlines()
+
+        try:
+            os.remove(fp)
+        except BaseException:
+            pass
+
+        self.storage.save()
 
         with open(fp, encoding="utf-8") as f:
-            for line in f:
+            handler1 = f.readlines()
+        self.assertEqual(handler, handler1)
+
+        try:
+            os.remove(pt)
+        except BaseException:
+            pass
+
+        with open(fp, "w", encoding="utf-8") as w:
+            w.write("{}")
+
+        with open(fp, encoding="utf-8") as r:
+            for line in r:
                 self.assertEqual(line, "{}")
+
+        self.assertIs(self.storage.reload(), None)
+
+
+if __name__ == "__main__":
+    unittest.main()
