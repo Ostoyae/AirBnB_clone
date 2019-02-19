@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+touch file.json
+python3 -m unittest discover tests

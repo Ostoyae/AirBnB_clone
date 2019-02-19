@@ -3,12 +3,6 @@
 FileStorage class is the backbone
 of the file storage engine.
 """
-#from models.amenity import Amenity
-#from models.base_model import BaseModel
-#from models.city import City
-#from models.place import Place
-#from models.reviews import Reviews
-#from models.state import State
 import json
 
 

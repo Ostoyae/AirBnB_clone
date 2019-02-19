@@ -5,7 +5,7 @@ Defines BaseModel class
 
 from datetime import datetime
 import uuid
-from models import storage
+import models
 
 
 class BaseModel():
@@ -40,7 +40,6 @@ class BaseModel():
             self.updated_at = self.created_at
             storage.new(self)
 #           storage.save()
-
 
     def __str__(self):
         """Returns string repr. of `BaseClass` model."""
