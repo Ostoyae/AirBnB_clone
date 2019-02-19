@@ -3,13 +3,11 @@
 """
 from models.base_model import BaseModel
 
+
 class City(BaseModel):
-    """Class for City Object
-    Inherts from BaseModel
+    """
+    Defines public attribute for class City
     """
 
     state_id = ""
     name = ""
-
-    def __init__(self):
-        pass

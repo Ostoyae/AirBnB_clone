@@ -6,10 +6,6 @@ from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """
-    Inherts from BaseModel
-    and represents host unit.
-    """
 
     city_id = ""
     user_id = ""

@@ -3,14 +3,12 @@
 """
 from models.base_model import BaseModel
 
+
 class Review(BaseModel):
-    """Class for Review Object
-    Inherts from BaseModel
+    """
+    Defines public attribute for class Review
     """
 
     place_id = ""
     user_id = ""
     text = ""
-
-    def __init__(self):
-        pass
