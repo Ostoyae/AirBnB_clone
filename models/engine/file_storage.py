@@ -60,9 +60,9 @@ class FileStorage():
         existence of file path.
         """
 
-            try:
-                with open(self.__file_path, encoding="utf-8") as fp:
-                    self.__objects = json.JSONDecoder().decode(fp.read())
+        try:
+            with open(self.__file_path, encoding="utf-8") as fp:
+                self.__objects = json.JSONDecoder().decode(fp.read())
 
-            except Exception:
-                self.__objects = {}
+        except Exception:
+            self.__objects = {}
