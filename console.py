@@ -164,7 +164,10 @@ class HBNBCommand(cmd.Cmd):
             processed string of type String
         """
 
-        parse = re.split(r"[.()]", line.strip())
+        parse = re.split(r'[.()]', line.strip())
+        encap = re.split(r'[()]', line.strip())
+        parse = parse[0:2]
+        parse += encap[1:]
         if parse[0] in self.validate and len(parse) > 1:
             try:
                 self.__class__.__dict__[parse[1]](self, parse)
@@ -473,7 +476,6 @@ class>}, ...]
                 return
 
             args = args[2::]
-
             if len(args) > 2:  # strip away any possible extra attributes
                 args = args[:2]
 
