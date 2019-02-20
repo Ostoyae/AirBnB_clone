@@ -164,7 +164,10 @@ class HBNBCommand(cmd.Cmd):
             processed string of type String
         """
 
-        parse = re.split(r"[.()]", line.strip())
+        parse = re.split(r'[.()]', line.strip())
+        encap = re.split(r'[()]', line.strip())
+        parse = parse[0:2]
+        parse += encap[1:]
         if parse[0] in self.validate and len(parse) > 1:
             try:
                 self.__class__.__dict__[parse[1]](self, parse)
@@ -236,13 +239,20 @@ class HBNBCommand(cmd.Cmd):
         Subclass action method for updating a Class via ID.
 
         Args:
-            obj: List of parse line [0: class, 1: action, 2: ID, 3: name, 4: value]
+            obj: List of parse line [0: class, 1: action, 2: unparsed values]
 
         Return:
             None
         """
-
-        self.do_update("{} {} {} {}".format(obj[0], obj[2][1:-1], obj[3][1:-1], obj[4][1:-1]))
+        a_id, field, val = (s.strip() for s in obj[2].split(','))
+#        print(obj[0])
+#        print("{} {} {}".format(a_id, field, val))
+        self.do_update("{} {} {} {}".format(
+            obj[0],
+            a_id[1:-1],
+            field[1:-1],
+            val
+            ))
 
     """-------------------------AirBnB commands--------------------------"""
 
@@ -466,7 +476,6 @@ class>}, ...]
                 return
 
             args = args[2::]
-
             if len(args) > 2:  # strip away any possible extra attributes
                 args = args[:2]
 
@@ -476,6 +485,15 @@ class>}, ...]
                         k = args[idx]
                     elif idx == 1:
                         v = args[idx]
+                        try:
+                            assert(float(args[idx]))
+                            v = float(args[idx])
+                            assert(int(args[idx]))
+                            v = int(args[idx])
+                        except:
+                            if type(v) is not float and type(v) is not int:
+                                if v[0] is '"' and v[-1] is '"':
+                                    v = v[1:-1]
 
                 except IndexError:
 
@@ -490,10 +508,9 @@ class>}, ...]
             cls = cls(**cls_dict)       # create a class with dict
             cls.save()                  # Update 'updated_at' attribute
             cls_dict = cls.to_dict()    # convert class into Dict rep
-            print(cls_dict)
             cls_dict.update({k: v})     # update/insert requested attribute
             self.objects[ident].update(cls_dict)  # update Objects
-            print(self.objects)
+            storage.save()
 
     def help_update(self):
         """
