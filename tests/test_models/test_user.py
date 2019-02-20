@@ -2,8 +2,9 @@
 """Test module for User class
 """
 
-import unittest
 import os
+import pep8
+import unittest
 from models.user import User
 from models import storage
 
@@ -32,7 +33,6 @@ class TestUser(unittest.TestCase):
         self.assertTrue('id' in self.user.__dict__)
         self.assertTrue('created_at' in self.user.__dict__)
         self.assertTrue('updated_at' in self.user.__dict__)
-        self.assertTrue('name' in self.user.__dict__)
 
     def test_documentation(self):
         self.assertIsNotNone(User.__doc__)
@@ -42,9 +42,6 @@ class TestUser(unittest.TestCase):
 
     def test_id(self):
         self.assertTrue(type(self.user.id), int)
-
-    def test_name(self):
-        self.assertTrue(type(self.user.name), str)
 
     def test_class(self):
         self.assertTrue(isinstance(self.user, User))
