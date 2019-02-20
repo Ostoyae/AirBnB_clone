@@ -76,31 +76,31 @@ class TestReview(unittest.TestCase):
         Test pub class attr 'place_id' was impl
         """
 
-        d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'place_id' for k in d.keys()))
+        d = self.objects[self.o_id].to_dict()
+        self.assertTrue(any(k == 'place_id' for k in d))
 
     def test_field_text(self):
         """
         Test pub class attr 'text' was impl
         """
 
-        d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'text' for k in d.keys()))
+        d = self.objects[self.o_id].to_dict()
+        self.assertTrue(any(k == 'text' for k in d))
 
     def test_field_user_id(self):
         """
         Test pub class attr 'user_id' was impl
         """
 
-        d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'user_id' for k in d.keys()))
+        d = self.objects[self.o_id].to_dict()
+        self.assertTrue(any(k == 'user_id' for k in d))
 
     def test_update(self):
         """
         test updating updated_at
         """
 
-        cur_time = self.objects[self.o_id]['updated_at']
+        cur_time = self.objects[self.o_id].to_dict()['updated_at']
         self.review.save()
         new_time = self.review.to_dict()['updated_at']
         self.assertNotEqual(cur_time, new_time)
@@ -110,15 +110,16 @@ class TestReview(unittest.TestCase):
         test load User from dictionary
         """
 
-        new = Review(**self.objects[self.o_id])
-        self.assertEqual(new.to_dict(), self.objects[self.o_id])
+        new = Review(**self.objects[self.o_id].to_dict())
+        self.assertEqual(new.to_dict(), self.objects[
+            self.o_id].to_dict())
 
     def test_no_private_attrs(self):
         """
         test that no private class var were added from User
         """
 
-        for k in self.objects[self.o_id].keys():
+        for k in self.objects[self.o_id].to_dict():
             if k is not '__class__':
                 self.assertTrue(('__' not in k))
 
@@ -127,4 +128,5 @@ class TestReview(unittest.TestCase):
         Test storaged object is class User
         """
 
-        self.assertEqual(self.objects[self.o_id]['__class__'], 'Review')
+        self.assertEqual(self.objects[self.o_id].to_dict()[
+            '__class__'], 'Review')

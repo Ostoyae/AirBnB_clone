@@ -48,23 +48,24 @@ class TestAmenity(unittest.TestCase):
         self.assertTrue(type(self.amenity.name), str)
 
     def test_field_name(self):
-        d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'name' for k in d.keys()))
+        d = self.objects[self.o_id].to_dict()
+        self.assertTrue(any(k == 'name' for k in d))
 
     def test_update(self):
-        cur_time = self.objects[self.o_id]['updated_at']
+        cur_time = self.objects[self.o_id].to_dict()['updated_at']
         self.amenity.save()
         new_time = self.amenity.to_dict()['updated_at']
         self.assertNotEqual(cur_time, new_time)
 
     def test_load_from_dict(self):
-        new = Amenity(**self.objects[self.o_id])
-        self.assertEqual(new.to_dict(), self.objects[self.o_id])
+        new = Amenity(**self.objects[self.o_id].to_dict())
+        self.assertEqual(new.to_dict(), self.objects[self.o_id].to_dict())
 
     def test_no_private_attrs(self):
-        for k in self.objects[self.o_id].keys():
+        for k in self.objects[self.o_id].to_dict():
             if k is not '__class__':
                 self.assertTrue(('__' not in k))
 
     def test_class_attr(self):
-        self.assertEqual(self.objects[self.o_id]['__class__'], 'Amenity')
+        self.assertEqual(self.objects[self.o_id].to_dict()[
+            '__class__'], 'Amenity')
