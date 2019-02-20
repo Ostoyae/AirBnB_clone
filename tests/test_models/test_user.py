@@ -21,12 +21,6 @@ class TestUser(unittest.TestCase):
 
         self.objects = storage.all()
 
-    def tearDown(self):
-        """
-        tearDown
-        """"
-
-        pass
 
     def test_style_check(self):
         """
