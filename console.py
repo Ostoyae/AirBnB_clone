@@ -255,7 +255,6 @@ class HBNBCommand(cmd.Cmd):
             val
             ))
 
-
     def do_create(self, line):
         """
         Creates an instance of a class and then
