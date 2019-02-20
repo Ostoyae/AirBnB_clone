@@ -186,7 +186,6 @@ class HBNBCommand(cmd.Cmd):
             None
         """
 
-
         self.get_all(obj[0], False)
 
     def count(self, obj):
@@ -205,6 +204,19 @@ class HBNBCommand(cmd.Cmd):
         with contextlib.redirect_stdout(io.StringIO()):  # supresses print()
             count = self.get_all(obj[0])
         print(count)
+
+    def show(self, obj):
+        """
+        Subclass action method to show an instance by ID.
+
+        Args:
+            obj: List of parse line [0: Classname, 1: action, 2: ID]
+
+        Return:
+            None
+        """
+
+        self.do_show("{} {}".format(obj[0], obj[2][1:-1]))
 
     def destroy(self, obj):
         """
