@@ -7,6 +7,7 @@ file engine.
 from models.engine.file_storage import FileStorage
 from models.city import City
 from models.review import Review
+from models.user import User
 import unittest
 import filecmp
 import json
@@ -74,7 +75,7 @@ class TestFileStorage(unittest.TestCase):
 
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files([
-            "models/engine/file_storage/file_storage.py"])
+            "models/engine/file_storage.py"])
         self.assertEqual(result.total_errors, 0, "PEP8 failure...")
 
     def test_methods_exist(self):
@@ -104,25 +105,10 @@ class TestFileStorage(unittest.TestCase):
         """
 
         fs = FileStorage()
-        dic = fstorage.all()
+        dic = fs.all()
         self.assertIsNotNone(dic)
         self.assertEqual(type(dic), dict)
         self.assertIs(dic, fs._FileStorage__objects)
-
-    def test_new(self):
-        """
-        Test the `new` method writes
-        clssname.id to `__objects`.
-        """
-
-        fs = FileStorage()
-        dic = fs.all()
-        subcls = City()
-        subcls.id = 94061
-        subcls.name = "San Francisco"
-        fs.new(subcls)
-        key = subcls.__class__.__name__ + "." + subcls.state_id
-        self.assertIsNotNone(dic[key])
 
     def test_reload(self):
         """
