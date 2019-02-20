@@ -257,7 +257,6 @@ class HBNBCommand(cmd.Cmd):
             val
             ))
 
-    """-------------------------AirBnB commands--------------------------"""
 
     def do_create(self, line):
         """
@@ -415,7 +414,7 @@ class HBNBCommand(cmd.Cmd):
                 print(']')
             return count
         else:
-            print("** class doen't exist **")
+            print("** class doesn't exist **")
 
     def help_all(self):
         """
