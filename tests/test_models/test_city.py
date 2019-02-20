@@ -106,7 +106,8 @@ class TestCity(unittest.TestCase):
         """
 
         new = City(**self.objects[self.o_id].to_dict())
-        self.assertEqual(new.to_dict(), self.objects[self.o_id])
+        self.assertEqual(new.to_dict(), self.objects[
+            self.o_id].to_dict())
 
     def test_no_private_attrs(self):
         """
