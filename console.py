@@ -217,7 +217,7 @@ class HBNBCommand(cmd.Cmd):
             None
         """
 
-        print('unimplmented')
+        self.do_destroy("{} {}".format(obj[0], obj[2][1:-1]))
 
     """-------------------------AirBnB commands--------------------------"""
 
