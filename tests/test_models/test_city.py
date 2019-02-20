@@ -79,15 +79,15 @@ class TestCity(unittest.TestCase):
         Test pub class attr name was impl
         """
 
-        d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'name' for k in d.keys()))
+        d = self.objects[self.o_id].to_dict()
+        self.assertTrue(any(k == 'name' for k in d))
 
     def test_field_state_id(self):
         """
         Test pub class attr state_id was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'state_id' for k in d.keys()))
 
     def test_update(self):
@@ -95,7 +95,7 @@ class TestCity(unittest.TestCase):
         test updating updated_at
         """
 
-        cur_time = self.objects[self.o_id]['updated_at']
+        cur_time = self.objects[self.o_id].to_dict()['updated_at']
         self.city.save()
         new_time = self.city.to_dict()['updated_at']
         self.assertNotEqual(cur_time, new_time)
@@ -105,7 +105,7 @@ class TestCity(unittest.TestCase):
         test load User from dictionary
         """
 
-        new = City(**self.objects[self.o_id])
+        new = City(**self.objects[self.o_id].to_dict())
         self.assertEqual(new.to_dict(), self.objects[self.o_id])
 
     def test_no_private_attrs(self):
@@ -113,7 +113,7 @@ class TestCity(unittest.TestCase):
         test that no private class var were added from User
         """
 
-        for k in self.objects[self.o_id].keys():
+        for k in self.objects[self.o_id].to_dict():
             if k is not '__class__':
                 self.assertTrue(('__' not in k))
 
@@ -122,4 +122,5 @@ class TestCity(unittest.TestCase):
         Test storaged object is class User
         """
 
-        self.assertEqual(self.objects[self.o_id]['__class__'], 'City')
+        self.assertEqual(self.objects[self.o_id].to_dict()[
+            '__class__'], 'City')
