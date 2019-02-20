@@ -4,6 +4,7 @@
 
 import unittest
 import os
+import pep8
 from models.place import Place
 from models import storage
 
@@ -32,7 +33,6 @@ class TestPlace(unittest.TestCase):
         self.assertTrue('id' in self.place.__dict__)
         self.assertTrue('created_at' in self.place.__dict__)
         self.assertTrue('updated_at' in self.place.__dict__)
-        self.assertTrue('name' in self.place.__dict__)
 
     def test_documentation(self):
         self.assertIsNotNone(Place.__doc__)
@@ -89,10 +89,6 @@ class TestPlace(unittest.TestCase):
         d = self.objects[self.o_id]
         self.assertTrue(any(k == 'longitude' for k in d.keys()))
 
-    def test_field_place_ids(self):
-        d = self.objects[self.o_id]
-        self.assertTrue(any(k == 'place_ids' for k in d.keys()))
-
     def test_update(self):
         cur_time = self.objects[self.o_id]['updated_at']
         self.place.save()
@@ -100,7 +96,7 @@ class TestPlace(unittest.TestCase):
         self.assertNotEqual(cur_time, new_time)
 
     def test_load_from_dict(self):
-        new = User(**self.objects[self.o_id])
+        new = Place(**self.objects[self.o_id])
         self.assertEqual(new.to_dict(), self.objects[self.o_id])
 
     def test_no_private_attrs(self):
