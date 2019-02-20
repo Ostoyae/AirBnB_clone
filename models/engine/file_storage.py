@@ -4,6 +4,13 @@ FileStorage class is the backbone
 of the file storage engine.
 """
 import json
+from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class FileStorage():
@@ -53,7 +60,6 @@ class FileStorage():
         with open(self.__file_path, "w", encoding="utf-8") as fp:
             for key, value in self.__objects.items():
                 to_save[key] = value.to_dict()
-                print(to_save)
 
             json.dump(to_save, fp)
 
@@ -66,7 +72,12 @@ class FileStorage():
 
         try:
             with open(self.__file_path, encoding="utf-8") as fp:
-                self.__objects = json.JSONDecoder().decode(fp.read())
+
+                file_handle = json.load(fp)
+                for key, value in file_handle.items():
+                    self.__objects[key] = globals()[
+                                    value['__class__']
+                                    ](**value)
 
         except Exception:
             self.__objects = {}
