@@ -3,6 +3,8 @@
 Test module for State class
 """
 
+import os
+import pep8
 import unittest
 from models.state import State
 from models import storage
@@ -35,7 +37,6 @@ class TestState(unittest.TestCase):
         self.assertTrue('id' in self.user.__dict__)
         self.assertTrue('created_at' in self.user.__dict__)
         self.assertTrue('updated_at' in self.user.__dict__)
-        self.assertTrue('name' in self.user.__dict__)
 
     def test_documentation(self):
         self.assertIsNotNone(State.__doc__)
