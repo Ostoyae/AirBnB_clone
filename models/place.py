@@ -6,6 +6,10 @@ from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """
+    Defines public attributes
+    for class Place.
+    """
 
     city_id = ""
     user_id = ""
