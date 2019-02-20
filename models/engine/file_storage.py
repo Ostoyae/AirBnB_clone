@@ -33,14 +33,17 @@ class FileStorage():
             base = obj.to_dict()
 
             if obj.__class__.__name__ is not 'BaseModel':
+
                 pub_cls = {
                     k: v
                     for k, v in obj.__class__.__dict__.items()
                     if '__' not in k
                 }
-                base.update(pub_cls)
 
-            self.__objects.update({key: base})
+                base.update(pub_cls)
+                obj = obj.__class__(**base)
+
+            self.__objects.update({key: obj})
 
     def save(self):
         """Serializes `__objects` to JSON file path"""
@@ -49,7 +52,8 @@ class FileStorage():
 
         with open(self.__file_path, "w", encoding="utf-8") as fp:
             for key, value in self.__objects.items():
-                to_save[key] = value
+                to_save[key] = value.to_dict()
+                print(to_save)
 
             json.dump(to_save, fp)
 

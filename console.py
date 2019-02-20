@@ -248,8 +248,6 @@ class HBNBCommand(cmd.Cmd):
             None
         """
         a_id, field, val = (s.strip() for s in obj[2].split(','))
-#        print(obj[0])
-#        print("{} {} {}".format(a_id, field, val))
         self.do_update("{} {} {} {}".format(
             obj[0],
             a_id[1:-1],
@@ -330,12 +328,12 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(' ')
 
             try:
-                (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
+                (cls, obj) = HBNBCommand.__find_class(args, self.objects)
 
             except Exception:
                 return
 
-            print(str(cls(**cls_dict)))
+            print(obj)
 
     def help_show(self):
         """
