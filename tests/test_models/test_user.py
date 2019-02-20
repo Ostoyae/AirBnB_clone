@@ -64,7 +64,7 @@ class TestUser(unittest.TestCase):
         Test pub class attr 'first_name' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'first_name' for k in d.keys()))
 
     def test_field_last_name(self):
@@ -72,7 +72,7 @@ class TestUser(unittest.TestCase):
         Test pub class attr was last_name impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'last_name' for k in d.keys()))
 
     def test_field_email(self):
@@ -80,7 +80,7 @@ class TestUser(unittest.TestCase):
         Test pub class attr was email impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'email' for k in d.keys()))
 
     def test_field_password(self):
@@ -88,7 +88,7 @@ class TestUser(unittest.TestCase):
         Test pub class attr password was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'password' for k in d.keys()))
 
     def test_update(self):
@@ -96,9 +96,9 @@ class TestUser(unittest.TestCase):
         test updating updated_at
         """
 
-        cur_time = self.objects[self.o_id]['updated_at']
+        cur_time = self.user.updated_at
         self.user.save()
-        new_time = self.user.to_dict()['updated_at']
+        new_time = self.user.updated_at
         self.assertNotEqual(cur_time, new_time)
 
     def test_load_from_dict(self):
@@ -106,15 +106,15 @@ class TestUser(unittest.TestCase):
         test load User from dictionary
         """
 
-        new = User(**self.objects[self.o_id])
-        self.assertEqual(new.to_dict(), self.objects[self.o_id])
+        new = User(**self.objects[self.o_id].to_dict())
+        self.assertEqual(new.to_dict(), self.objects[self.o_id].to_dict())
 
     def test_no_private_attrs(self):
         """
         test that no private class var were added from User
         """
 
-        for k in self.objects[self.o_id].keys():
+        for k in self.objects[self.o_id].to_dict().keys():
             if k is not '__class__':
                 self.assertTrue(('__' not in k))
 
@@ -123,4 +123,6 @@ class TestUser(unittest.TestCase):
         Test storaged object is class User
         """
 
-        self.assertEqual(self.objects[self.o_id]['__class__'], 'User')
+        self.assertEqual(
+                self.objects[self.o_id].to_dict()['__class__'], 'User'
+                )
