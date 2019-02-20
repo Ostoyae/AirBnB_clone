@@ -192,7 +192,7 @@ class HBNBCommand(cmd.Cmd):
             None
         """
 
-        self.get_all(obj[0], False)
+        self.get_all(obj[0])
 
     def count(self, obj):
         """
@@ -386,22 +386,18 @@ class HBNBCommand(cmd.Cmd):
         if line:
             for k, v in self.objects.items():
                 if k.startswith(line):
-                    obj = globals()[line](**v)
-                    ls_d.append(str(obj))
+                    ls_d.append(v)
                     count += 1
-                    del obj
 
         else:
             if self.objects:
                 for k, v in self.objects.items():
-                    obj = globals()[v['__class__']](**v)
-                    ls_d.append(str(obj))
+                    ls_d.append(v)
                     count += 1
-                    del obj
 
         if ls_d:
             if as_str:
-                print(ls_d)
+                print([str(o) for o in ls_d])
             else:
                 print('[', end='')
                 for i, v in enumerate(ls_d):
@@ -468,7 +464,7 @@ class>}, ...]
             args = line.split(' ')
 
             try:
-                (cls, cls_dict) = HBNBCommand.__find_class(args, self.objects)
+                (cls, obj) = HBNBCommand.__find_class(args, self.objects)
                 ident = "{}.{}".format(args[0], args[1])
 
             except Exception:
@@ -503,12 +499,19 @@ class>}, ...]
                         print("** value missing **")
 
                     return
-
-            cls = cls(**cls_dict)       # create a class with dict
+            
+            '''
+            cls = obj(**cls_dict)       # create a class with dict
             cls.save()                  # Update 'updated_at' attribute
             cls_dict = cls.to_dict()    # convert class into Dict rep
             cls_dict.update({k: v})     # update/insert requested attribute
             self.objects[ident].update(cls_dict)  # update Objects
+            '''
+            
+            obj.save()
+            obj.__dict__.update({k: v})
+            self.objects.update({ident: obj})
+            
             storage.save()
 
     def help_update(self):
