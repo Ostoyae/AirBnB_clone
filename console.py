@@ -499,7 +499,7 @@ class>}, ...]
                         print("** value missing **")
 
                     return
-            
+
             '''
             cls = obj(**cls_dict)       # create a class with dict
             cls.save()                  # Update 'updated_at' attribute
@@ -507,11 +507,11 @@ class>}, ...]
             cls_dict.update({k: v})     # update/insert requested attribute
             self.objects[ident].update(cls_dict)  # update Objects
             '''
-            
+
             obj.save()
             obj.__dict__.update({k: v})
             self.objects.update({ident: obj})
-            
+
             storage.save()
 
     def help_update(self):
