@@ -24,12 +24,15 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb) '
+
+    """
     intro = "{}".format('''
     Holberton bnb (hbnb) console.
     version 0.0.1
 
     Type help or ? for list of commands.
     ''')
+    """
 
     objects = storage.all()
 
