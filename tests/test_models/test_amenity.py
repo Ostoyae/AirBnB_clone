@@ -3,6 +3,8 @@
 Test module for Amenity class.
 """
 
+import os
+import pep8
 import unittest
 from models.amenity import Amenity
 from models import storage
@@ -36,7 +38,6 @@ class TestAmenity(unittest.TestCase):
         self.assertTrue('id' in self.amenity.__dict__)
         self.assertTrue('created_at' in self.amenity.__dict__)
         self.assertTrue('updated_at' in self.amenity.__dict__)
-        self.assertTrue('name' in self.amenity.__dict__)
 
     def test_documentation(self):
         self.assertIsNotNone(Amenity.__doc__)
