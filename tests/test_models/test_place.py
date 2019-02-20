@@ -79,7 +79,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'first_name' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'city_id' for k in d.keys()))
 
     def test_field_user_id(self):
@@ -87,7 +87,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'first_name' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'user_id' for k in d.keys()))
 
     def test_field_name(self):
@@ -95,7 +95,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'name' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'name' for k in d.keys()))
 
     def test_field_description(self):
@@ -103,7 +103,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'description' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'description' for k in d.keys()))
 
     def test_number_rooms(self):
@@ -111,7 +111,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'number_rooms' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'number_rooms' for k in d.keys()))
 
     def test_number_bathrooms(self):
@@ -119,7 +119,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'number_bathrooms' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'number_bathrooms' for k in d.keys()))
 
     def test_field_max_guest(self):
@@ -127,7 +127,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'max_guest' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'max_guest' for k in d.keys()))
 
     def test_field_price_by_night(self):
@@ -135,7 +135,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'price_by_night' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'price_by_night' for k in d.keys()))
 
     def test_field_latitude(self):
@@ -143,7 +143,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'latitude' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'latitude' for k in d.keys()))
 
     def test_field_longitude(self):
@@ -151,7 +151,7 @@ class TestPlace(unittest.TestCase):
         Test pub class attr 'longitude' was impl
         """
 
-        d = self.objects[self.o_id]
+        d = self.objects[self.o_id].to_dict()
         self.assertTrue(any(k == 'longitude' for k in d.keys()))
 
     def test_update(self):
@@ -159,9 +159,9 @@ class TestPlace(unittest.TestCase):
         test updating updated_at
         """
 
-        cur_time = self.objects[self.o_id]['updated_at']
+        cur_time = self.objects[self.o_id].updated_at
         self.place.save()
-        new_time = self.place.to_dict()['updated_at']
+        new_time = self.place.updated_at
         self.assertNotEqual(cur_time, new_time)
 
     def test_load_from_dict(self):
@@ -169,15 +169,15 @@ class TestPlace(unittest.TestCase):
         test load User from dictionary
         """
 
-        new = Place(**self.objects[self.o_id])
-        self.assertEqual(new.to_dict(), self.objects[self.o_id])
+        new = Place(**self.objects[self.o_id].to_dict())
+        self.assertEqual(new.to_dict(), self.objects[self.o_id].to_dict())
 
     def test_no_private_attrs(self):
         """
         test that no private class var were added from User
         """
 
-        for k in self.objects[self.o_id].keys():
+        for k in self.objects[self.o_id].to_dict().keys():
             if k is not '__class__':
                 self.assertTrue(('__' not in k))
 
@@ -186,4 +186,6 @@ class TestPlace(unittest.TestCase):
         Test storaged object is class User
         """
 
-        self.assertEqual(self.objects[self.o_id]['__class__'], 'Place')
+        self.assertEqual(self.objects[self.o_id].to_dict()[
+            '__class__'
+            ], 'Place')
