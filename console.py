@@ -24,12 +24,15 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb) '
+
+    """
     intro = "{}".format('''
     Holberton bnb (hbnb) console.
     version 0.0.1
 
     Type help or ? for list of commands.
     ''')
+    """
 
     objects = storage.all()
 
@@ -254,7 +257,6 @@ class HBNBCommand(cmd.Cmd):
             val
             ))
 
-    """-------------------------AirBnB commands--------------------------"""
 
     def do_create(self, line):
         """
@@ -412,7 +414,7 @@ class HBNBCommand(cmd.Cmd):
                 print(']')
             return count
         else:
-            print("** class doen't exist **")
+            print("** class doesn't exist **")
 
     def help_all(self):
         """
