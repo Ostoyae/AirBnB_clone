@@ -22,11 +22,7 @@ class TestState(unittest.TestCase):
         self.objects = storage.all()
 
     def tearDown(self):
-        try:
-            os.remove("file.json")
-
-        except FileNotFoundError:
-            pass
+        pass
 
     def test_style_check(self):
         pep8style = pep8.StyleGuide(quiet=True)
