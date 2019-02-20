@@ -3,6 +3,8 @@
 Test module for City class
 """
 
+import os
+import pep8
 import unittest
 from models.city import City
 from models import storage
@@ -35,7 +37,6 @@ class TestCity(unittest.TestCase):
         self.assertTrue('id' in self.city.__dict__)
         self.assertTrue('created_at' in self.city.__dict__)
         self.assertTrue('updated_at' in self.city.__dict__)
-        self.assertTrue('name' in self.city.__dict__)
 
     def test_documentation(self):
         self.assertIsNotNone(City.__doc__)
