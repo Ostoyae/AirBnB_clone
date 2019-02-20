@@ -223,13 +223,26 @@ class HBNBCommand(cmd.Cmd):
         Subclass action method for destroy a Class that currently exists via id
 
         Args:
-            obj: List of a parse line [0: Classname, 1: action, 2: Id]
+            obj: List of a parse line [0: Classname, 1: action, 2: ID]
 
         Return:
             None
         """
 
         self.do_destroy("{} {}".format(obj[0], obj[2][1:-1]))
+
+    def update(self, obj):
+        """
+        Subclass action method for updating a Class via ID.
+
+        Args:
+            obj: List of parse line [0: class, 1: action, 2: ID, 3: name, 4: value]
+
+        Return:
+            None
+        """
+
+        self.do_update("{} {} {} {}".format(obj[0], obj[2][1:-1], obj[3][1:-1], obj[4][1:-1]))
 
     """-------------------------AirBnB commands--------------------------"""
 
