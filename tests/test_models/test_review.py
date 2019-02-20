@@ -3,6 +3,8 @@
 Test module for Review class.
 """
 
+import os
+import pep8
 import unittest
 from models.review import Review
 from models import storage
@@ -35,7 +37,6 @@ class TestReview(unittest.TestCase):
         self.assertTrue('id' in self.review.__dict__)
         self.assertTrue('created_at' in self.review.__dict__)
         self.assertTrue('updated_at' in self.review.__dict__)
-        self.assertTrue('name' in self.review.__dict__)
 
     def test_documentation(self):
         self.assertIsNotNone(Review.__doc__)
@@ -45,9 +46,6 @@ class TestReview(unittest.TestCase):
 
     def test_id(self):
         self.assertTrue(type(self.review.id), int)
-
-    def test_name(self):
-        self.assertTrue(type(self.review.name), str)
 
     def test_class(self):
         self.assertTrue(isinstance(self.review, Review))
