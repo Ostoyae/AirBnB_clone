@@ -1,14 +1,15 @@
 /* The default body */
 body {
-color:#484848;
-font-size:14px;
-font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serifi;
-
+  color: #484848;
+  font-size: 14px;
+  font-family: Circular, "Helvetica Neue", Helvetica, Arial, sans-serifi;
+  position: relative;
 }
 
 div.container {
-	max-width: 1000px;
-	margin: auto;
-	margin-top: 30px;
-	margin-bottom: 30px;
+  max-width: 1000px;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  min-height: calc(100vh - 230px)
 }
