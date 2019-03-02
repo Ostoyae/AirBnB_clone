@@ -83,3 +83,13 @@ article .information {
   background-image: url("../images/icon_bath.png");
   background-repeat: no-repeat;
 }
+
+article .user {
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+article .description {
+  text-align: left;
+}
